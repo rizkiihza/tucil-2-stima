@@ -18,7 +18,7 @@ void generate_data(int size){
 
 void print_data(){
     for(int i=0;i<data.size();i++){
-        cout<<data[i]<<" ";
+        cout<<data[i]<<endl;
     }
     cout<<endl;
 }
@@ -40,6 +40,8 @@ void swap(int i,int j){
 
 
 //MULAI BAGIAN SORTING
+
+//selection sort
 void selection_sort(){
     for(int i=0;i<data.size();i++){
         //pertama cari maksium
@@ -55,16 +57,21 @@ void selection_sort(){
     }
 }
 
+//insertion sort
 void insertion_sort(){
-    for(int i=0;i<data.size();i++){
-        int j=i;
-        while(j>0 && data[j]<data[j-1]){
-            swap(j,j-1);
-            j--;
-        }
-    }
+   int i, j, sekarang;
+   for (i =1;i<data.size();i++) {
+       sekarang = data[i];
+       j = i-1;
+       while (j>=0 && data[j]>sekarang){
+           data[j+1]=data[j];
+           j=j-1;
+       }
+       data[j+1] = sekarang;
+   }
 }
 
+//quick sort
 void quick_sort(int left,int right){
     if(left<right){
         int wall=left-1;
@@ -83,6 +90,7 @@ void quick_sort(int left,int right){
     }
 }
 
+//merge sort
 void merge_sort(int left,int right){
     if(left<right){
         int mid=(left+right)/2;
@@ -130,18 +138,31 @@ void merge_sort(int left,int right){
 //MAIN PROGRAM
 
 int main(){
-    generate_data(1000000);
-    // print_data();
+    int banyak;
+    cin>>banyak;
+    generate_data(banyak);
+    
 
     clock_t start,end;
     start=clock();
     insertion_sort();
+    print_data();
     end=clock();
-    cout<<"lama waktu adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<endl<<endl;
+    cout<<"lama waktu insertion sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
 
-    // print_data();
-    if(is_sorted()){
-        cout<<"array telah di sort";
-    } 
+    start=clock();
+    selection_sort();
+    end=clock();
+    cout<<"lama waktu selection sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
+
+    start=clock();
+    merge_sort(0,data.size()-1);
+    end=clock();
+    cout<<"lama waktu merge sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
+
+    start=clock();
+    quick_sort(0,data.size()-1);
+    end=clock();
+    cout<<"lama waktu quick sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
     return 0;
 }
