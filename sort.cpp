@@ -4,15 +4,23 @@
 
 using namespace std;
 
+vector<int> sdata;
 vector<int> data;
 
 //RANDOM DATA GENERATOR AND OTHER HELPING FUNCTION
 
-void generate_data(int size){
+void generate_seed_data(int size){
     srand(time(NULL));
     int inp;
     for(int i=0;i<size;i++){
-        data.push_back(rand()%10000+1);
+        sdata.push_back(rand()%(10*size)+1);
+    }
+}
+
+void reset_data(){
+    data.clear();
+    for(int i=0;i<sdata.size();i++){
+        data.push_back(sdata[i]);
     }
 }
 
@@ -59,8 +67,8 @@ void selection_sort(){
 
 //insertion sort
 void insertion_sort(){
-   int i, j, sekarang;
-   for (i =1;i<data.size();i++) {
+   int i,j,sekarang;
+   for (i =0;i<data.size();i++) {
        sekarang = data[i];
        j = i-1;
        while (j>=0 && data[j]>sekarang){
@@ -75,9 +83,9 @@ void insertion_sort(){
 void quick_sort(int left,int right){
     if(left<right){
         int wall=left-1;
-        int pivot=right;
+        int pivot=(right+left)/2;
         int i=left;
-        while(i<pivot){
+        while(i<right){
             if(data[i]<data[pivot]){
                 wall++;
                 swap(i,wall);
@@ -138,31 +146,37 @@ void merge_sort(int left,int right){
 //MAIN PROGRAM
 
 int main(){
-    int banyak;
-    cin>>banyak;
-    generate_data(banyak);
-    
+     int banyak;
+     cin>>banyak;
+    generate_seed_data(banyak);
 
+    reset_data();
     clock_t start,end;
-    start=clock();
-    insertion_sort();
-    print_data();
-    end=clock();
-    cout<<"lama waktu insertion sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
-
     start=clock();
     selection_sort();
     end=clock();
+    print_data();
     cout<<"lama waktu selection sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
 
-    start=clock();
-    merge_sort(0,data.size()-1);
-    end=clock();
-    cout<<"lama waktu merge sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
+    reset_data();
+    clock_t start2,end2;
+    start2=clock();
+    insertion_sort();
+    end2=clock();
+    cout<<"lama waktu insertion sort adalah: "<<(end2-start2)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
 
-    start=clock();
+    reset_data();
+    clock_t start3,end3;
+    start3=clock();
+    merge_sort(0,data.size()-1);
+    end3=clock();
+    cout<<"lama waktu merge sort adalah: "<<(end3-start3)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
+
+    reset_data();
+    clock_t start4,end4;
+    start4=clock();
     quick_sort(0,data.size()-1);
-    end=clock();
-    cout<<"lama waktu quick sort adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
+    end4=clock();
+    cout<<"lama waktu quick sort adalah: "<<(end4-start4)/(double) CLOCKS_PER_SEC<<" detik"<<endl<<endl;
     return 0;
 }
