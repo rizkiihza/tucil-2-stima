@@ -8,11 +8,11 @@ vector<int> data;
 
 //RANDOM DATA GENERATOR AND OTHER HELPING FUNCTION
 
-void read_data(int size){
+void generate_data(int size){
     srand(time(NULL));
     int inp;
     for(int i=0;i<size;i++){
-        data.push_back(rand()%1000+1);
+        data.push_back(rand()%10000+1);
     }
 }
 
@@ -89,34 +89,40 @@ void merge_sort(int left,int right){
         merge_sort(left,mid);
         merge_sort(mid+1,right);
 
-        vector<int> joined;
+        int* joined=new int[right-left+1];
+        int joined_idx=0;
         int first_array_idx=left;
         int second_array_idx=mid+1;
 
         while(first_array_idx<=mid || second_array_idx<=right){
             if(first_array_idx==mid+1){
-                joined.push_back(data[second_array_idx]);
+                //joined.push_back(data[second_array_idx]);
+                joined[joined_idx++]=data[second_array_idx];
                 second_array_idx++;
             }
             
             else if(second_array_idx==right+1){
-                joined.push_back(data[first_array_idx]);
+                //joined.push_back(data[first_array_idx]);
+                joined[joined_idx++]=data[first_array_idx];
                 first_array_idx++;
             }
 
             else if(data[first_array_idx]<data[second_array_idx]){
-                joined.push_back(data[first_array_idx]);
+                //joined.push_back(data[first_array_idx]);
+                joined[joined_idx++]=data[first_array_idx];
                 first_array_idx++;
             }
 
             else{
-                joined.push_back(data[second_array_idx]);
+                //joined.push_back(data[second_array_idx]);
+                joined[joined_idx++]=data[second_array_idx];
                 second_array_idx++;
             }          
         }
          for(int i=left;i<=right;i++){
                 data[i]=joined[i-left];
             }
+         delete [] joined;
     }
 }
 
@@ -124,10 +130,18 @@ void merge_sort(int left,int right){
 //MAIN PROGRAM
 
 int main(){
-    read_data(50);
-    print_data();
-    merge_sort(0,data.size()-1);
-    print_data();
-    cout<<is_sorted()<<endl;
+    generate_data(1000000);
+    // print_data();
+
+    clock_t start,end;
+    start=clock();
+    insertion_sort();
+    end=clock();
+    cout<<"lama waktu adalah: "<<(end-start)/(double) CLOCKS_PER_SEC<<endl<<endl;
+
+    // print_data();
+    if(is_sorted()){
+        cout<<"array telah di sort";
+    } 
     return 0;
 }
